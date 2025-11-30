@@ -40,12 +40,24 @@ $current_list = isset( $wishlists[ $session_id ] ) ? $wishlists[ $session_id ] :
             $url    = get_permalink( $product_id );
 
         ?>
-            <li class="wrw-item">
+            <li class="wrw-item" data-id="<?php echo esc_attr( $product_id ); ?>">
 
                 <div class="wrw-thumb">
+
+                    <!-- PRODUCT IMAGE -->
                     <a href="<?php echo esc_url( $url ); ?>">
                         <?php echo $image; ?>
                     </a>
+
+                    <!-- REMOVE HEART BUTTON -->
+                    <div class="wrw-wishlist-btn wrw-remove-btn" 
+                        data-product="<?php echo esc_attr( $product_id ); ?>"
+                        data-active="1">
+
+                        <span class="wrw-heart active"></span>
+
+                    </div>
+
                 </div>
 
                 <div class="wrw-info">
@@ -65,13 +77,6 @@ $current_list = isset( $wishlists[ $session_id ] ) ? $wishlists[ $session_id ] :
                         <a href="<?php echo esc_url( $url ); ?>" class="wrw-btn">
                             View Product
                         </a>
-
-                        <!-- REMOVE BUTTON (uses same toggle AJAX) -->
-                        <button class="wrw-btn-remove wrw-wishlist-btn" 
-                                data-product="<?php echo esc_attr( $product_id ); ?>"
-                                data-active="1">
-                            Remove
-                        </button>
 
                     </div>
                 </div>
