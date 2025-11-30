@@ -1,53 +1,49 @@
-(function($) {
-    'use strict';
+jQuery(function($){
 
-    function getNonce() {
-        if (typeof WRW_VARS !== 'undefined' && WRW_VARS.nonce) {
-            return WRW_VARS.nonce;
-        }
-        return '';
-    }
+    $('body').on('click', '.wrw-wishlist-btn', function(e){
+        e.preventDefault();
 
-    $(document).on('click', '.wrw-wishlist-btn', function(event) {
-        event.preventDefault();
+        let btn       = $(this);
+        let productID = btn.data('product');
 
-        var $button   = $(this);
-        var productId = $button.data('product');
-        var nonce     = getNonce();
+        if (!productID) return;
 
-        if (!productId || $button.data('loading')) {
-            return;
-        }
-
-        $button.data('loading', true);
+        btn.addClass('wrw-loading');
 
         $.post(WRW_VARS.ajax_url, {
-            action: 'wrw_toggle_wishlist',
-            product_id: productId,
-            nonce: nonce
-        })
-        .done(function(response) {
-            if (!response || !response.success) {
-                console.error(response && response.data ? response.data.message : 'Wishlist request failed.');
+            action:    'wrw_toggle_wishlist',
+            nonce:     WRW_VARS.nonce,
+            product_id: productID
+        }, function(res){
+
+            btn.removeClass('wrw-loading');
+
+            if (!res || !res.success) {
+                console.error("Wishlist Error:", res && res.data ? res.data.message : 'Unknown error');
                 return;
             }
 
-            var isActive = response.data.status === 'added';
-
-            $button.attr('data-active', isActive ? '1' : '0');
-            $button.find('.wrw-heart').toggleClass('active', isActive);
-
-            $(document).trigger('wrw:wishlist:toggled', [isActive, response.data]);
-
-            if ($('.wrw-wishlist-count').length) {
-                $('.wrw-wishlist-count').text(response.data.count);
+            // ADDED
+            if (res.data.status === 'added') {
+                btn.data('active', 1);
+                btn.find('.wrw-heart').addClass('active');
             }
-        })
-        .fail(function(jqXHR) {
-            console.error('Wishlist AJAX failed:', jqXHR.statusText);
-        })
-        .always(function() {
-            $button.data('loading', false);
-        });
+
+            // REMOVED
+            if (res.data.status === 'removed') {
+                btn.data('active', 0);
+                btn.find('.wrw-heart').removeClass('active');
+
+                // Eğer wishlist sayfasındaysak kartı DOM'dan da kaldır
+                let item = btn.closest('.wrw-item');
+                if (item.length) {
+                    item.slideUp(200, function(){
+                        $(this).remove();
+                    });
+                }
+            }
+
+        }, 'json');
     });
-})(jQuery);
+
+});
