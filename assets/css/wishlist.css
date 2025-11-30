@@ -1,59 +1,83 @@
 .wrw-wishlist-page {
-    max-width: 900px;
-    margin: 50px auto;
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 20px;
 }
 
-.wrw-wishlist-wrapper {
-    margin: 20px 0;
-    padding: 16px;
-    border: 1px solid #e5e5e5;
-    border-radius: 8px;
-    background: #fff;
+.wrw-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 25px;
 }
 
-.wrw-wishlist-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 12px;
+.wrw-empty-state {
+    text-align: center;
+    padding: 70px 20px;
 }
 
-.wrw-wishlist-count {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 26px;
-    padding: 4px 8px;
-    background: #f6f6f6;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 600;
+.wrw-empty-state .wrw-btn {
+    background: #111;
+    color: #fff;
+    padding: 12px 22px;
+    border-radius: 6px;
+    display: inline-block;
+    margin-top: 10px;
 }
 
-.wrw-wishlist-items {
+.wrw-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 25px;
     list-style: none;
     padding: 0;
-    margin: 0;
-    display: grid;
-    gap: 8px;
 }
 
-.wrw-wishlist-item a {
-    display: block;
-    padding: 10px 12px;
-    border: 1px solid #ececec;
+.wrw-item {
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 15px;
+    background: #fff;
+    position: relative;
+}
+
+.wrw-thumb img {
+    border-radius: 12px;
+}
+
+.wrw-info {
+    margin-top: 15px;
+}
+
+.wrw-name {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.wrw-price {
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.wrw-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.wrw-btn {
+    background: #111;
+    color: #fff;
+    padding: 10px 14px;
     border-radius: 6px;
-    color: #222;
     text-decoration: none;
-    transition: border-color 0.2s ease, transform 0.2s ease;
+    display: inline-block;
 }
 
-.wrw-wishlist-item a:hover {
-    border-color: #ff4d6d;
-    transform: translateY(-1px);
-}
-
-.wrw-empty {
-    margin: 0;
-    color: #666;
+.wrw-btn-remove {
+    background: #ff3b57;
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
 }

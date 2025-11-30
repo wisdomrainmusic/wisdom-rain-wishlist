@@ -2,39 +2,86 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 $session_id = WRW_Session::get_session_id();
-$wishlists  = get_option( 'wrw_wishlists', [] );
-$current    = isset( $wishlists[ $session_id ] ) && is_array( $wishlists[ $session_id ] )
-    ? array_filter( array_map( 'absint', $wishlists[ $session_id ] ) )
-    : [];
+
+// Get all wishlists
+$wishlists = get_option( 'wrw_wishlists', [] );
+
+// Current user's wishlist
+$current_list = isset( $wishlists[ $session_id ] ) ? $wishlists[ $session_id ] : [];
+
 ?>
 
 <div class="wrw-wishlist-page">
-    <div class="wrw-wishlist-wrapper">
-        <div class="wrw-wishlist-header">
-            <h2><?php esc_html_e( 'My Wishlist', 'wisdom-rain-wishlist' ); ?></h2>
-            <span class="wrw-wishlist-count"><?php echo esc_html( count( $current ) ); ?></span>
+
+    <h2 class="wrw-title">My Wishlist</h2>
+
+    <?php if ( empty( $current_list ) ) : ?>
+
+        <!-- EMPTY STATE -->
+        <div class="wrw-empty-state">
+            <p>Your wishlist is empty.</p>
+            <a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="wrw-btn">
+                Go to Shop
+            </a>
         </div>
 
-        <?php if ( empty( $current ) ) : ?>
-            <p class="wrw-empty"><?php esc_html_e( 'Your wishlist is empty.', 'wisdom-rain-wishlist' ); ?></p>
-        <?php else : ?>
-            <ul class="wrw-wishlist-items">
-                <?php foreach ( $current as $product_id ) :
-                    $title = get_the_title( $product_id );
+    <?php else : ?>
 
-                    if ( ! $title ) {
-                        continue;
-                    }
+        <ul class="wrw-grid">
 
-                    $permalink = get_permalink( $product_id );
-                    ?>
-                    <li class="wrw-wishlist-item">
-                        <a href="<?php echo esc_url( $permalink ); ?>">
+        <?php foreach ( $current_list as $product_id ) : 
+            
+            $product = wc_get_product( $product_id );
+            if ( ! $product ) continue;
+
+            $image  = $product->get_image();
+            $title  = $product->get_title();
+            $price  = $product->get_price_html();
+            $url    = get_permalink( $product_id );
+
+        ?>
+            <li class="wrw-item">
+
+                <div class="wrw-thumb">
+                    <a href="<?php echo esc_url( $url ); ?>">
+                        <?php echo $image; ?>
+                    </a>
+                </div>
+
+                <div class="wrw-info">
+                    <h3 class="wrw-name">
+                        <a href="<?php echo esc_url( $url ); ?>">
                             <?php echo esc_html( $title ); ?>
                         </a>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        <?php endif; ?>
-    </div>
+                    </h3>
+
+                    <div class="wrw-price">
+                        <?php echo wp_kses_post( $price ); ?>
+                    </div>
+
+                    <div class="wrw-actions">
+
+                        <!-- VIEW PRODUCT -->
+                        <a href="<?php echo esc_url( $url ); ?>" class="wrw-btn">
+                            View Product
+                        </a>
+
+                        <!-- REMOVE BUTTON (uses same toggle AJAX) -->
+                        <button class="wrw-btn-remove wrw-wishlist-btn" 
+                                data-product="<?php echo esc_attr( $product_id ); ?>"
+                                data-active="1">
+                            Remove
+                        </button>
+
+                    </div>
+                </div>
+
+            </li>
+
+        <?php endforeach; ?>
+
+        </ul>
+
+    <?php endif; ?>
+
 </div>
