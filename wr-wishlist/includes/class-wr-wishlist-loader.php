@@ -17,11 +17,17 @@ class WR_Wishlist_Loader {
     }
 
     public static function assets() {
+        $js_path  = WR_WL_DIR . 'assets/js/wishlist.js';
+        $css_path = WR_WL_DIR . 'assets/css/wishlist.css';
+
+        $version_js  = file_exists( $js_path ) ? filemtime( $js_path ) : '1.0.0';
+        $version_css = file_exists( $css_path ) ? filemtime( $css_path ) : '1.0.0';
+
         wp_enqueue_script(
             'wr-wishlist-js',
             WR_WL_URL . 'assets/js/wishlist.js',
             ['jquery'],
-            '1.0.0',
+            $version_js,
             true
         );
 
@@ -34,7 +40,7 @@ class WR_Wishlist_Loader {
             'wr-wishlist-css',
             WR_WL_URL . 'assets/css/wishlist.css',
             [],
-            '1.0.0'
+            $version_css
         );
     }
 
