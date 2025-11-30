@@ -14,6 +14,9 @@ class WRW_Loader {
         // Load required files
         self::load_dependencies();
 
+        // Initialize render hooks
+        WRW_Render::init();
+
         // Initialize core components
         add_action( 'plugins_loaded', [ __CLASS__, 'plugins_loaded' ] );
         add_action( 'init', [ 'WRW_Init', 'register_assets' ] );
