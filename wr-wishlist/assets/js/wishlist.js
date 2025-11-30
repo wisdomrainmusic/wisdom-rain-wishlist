@@ -3,7 +3,8 @@ jQuery(function($){
     $(document).on('click', '.wr-wishlist-btn', function(e){
         e.preventDefault();
 
-        let product_id = $(this).data('id');
+        let btn = $(this);
+        let product_id = btn.data('id');
 
         $.post(WRWL.ajax, {
             action: 'wr_toggle_wishlist',
@@ -12,7 +13,9 @@ jQuery(function($){
         }, function(res){
 
             if(res.success){
-                console.log('Wishlist updated', res.data);
+
+                // Toggle active state on icon
+                btn.toggleClass('active');
             } else {
                 alert(res.data.message);
             }
