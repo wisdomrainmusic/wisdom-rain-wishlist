@@ -17,6 +17,7 @@ class WRW_Loader {
         // Initialize core components
         add_action( 'plugins_loaded', [ __CLASS__, 'plugins_loaded' ] );
         add_action( 'init', [ 'WRW_Init', 'register_assets' ] );
+        add_action( 'init', [ 'WRW_Init', 'register_shortcode' ] );
         add_action( 'wp_enqueue_scripts', [ 'WRW_Init', 'enqueue_styles_scripts' ] );
         add_action( 'admin_enqueue_scripts', [ 'WRW_Admin', 'enqueue_admin_assets' ] );
 
