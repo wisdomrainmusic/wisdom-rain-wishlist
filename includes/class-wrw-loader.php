@@ -11,24 +11,40 @@ class WRW_Loader {
      */
     public static function init() {
 
+        // -------------------------------------------------
         // Load required files
+        // -------------------------------------------------
         self::load_dependencies();
 
+        // -------------------------------------------------
         // Initialize render hooks
+        // -------------------------------------------------
         WRW_Render::init();
 
-        // Initialize core components
+        // -------------------------------------------------
+        // Core components
+        // -------------------------------------------------
         add_action( 'plugins_loaded', [ __CLASS__, 'plugins_loaded' ] );
         add_action( 'init', [ 'WRW_Init', 'register_assets' ] );
         add_action( 'init', [ 'WRW_Init', 'register_shortcode' ] );
         add_action( 'wp_enqueue_scripts', [ 'WRW_Init', 'enqueue_styles_scripts' ] );
         add_action( 'admin_enqueue_scripts', [ 'WRW_Admin', 'enqueue_admin_assets' ] );
 
-        // Ajax (logged-in + non-logged-in)
-        add_action( 'wp_ajax_wrw_toggle_wishlist', [ 'WRW_Ajax', 'toggle_wishlist' ] );
+        // -------------------------------------------------
+        // AJAX ACTIONS (LOGGED IN + GUEST)
+        // -------------------------------------------------
+
+        // Wishlist Add/Remove (toggle)
+        add_action( 'wp_ajax_wrw_toggle_wishlist',        [ 'WRW_Ajax', 'toggle_wishlist' ] );
         add_action( 'wp_ajax_nopriv_wrw_toggle_wishlist', [ 'WRW_Ajax', 'toggle_wishlist' ] );
 
+        // NEW: Wishlist Page — Single Remove button
+        add_action( 'wp_ajax_wrw_remove_wishlist',        [ 'WRW_Ajax', 'remove_item' ] );
+        add_action( 'wp_ajax_nopriv_wrw_remove_wishlist', [ 'WRW_Ajax', 'remove_item' ] );
+
+        // -------------------------------------------------
         // REST API
+        // -------------------------------------------------
         add_action( 'rest_api_init', [ 'WRW_Endpoints', 'register_routes' ] );
     }
 
@@ -54,6 +70,6 @@ class WRW_Loader {
      * Runs when all plugins are loaded
      */
     public static function plugins_loaded() {
-        // Future: translations, global hooks
+        // Future features: translations, global hooks, logs
     }
 }
